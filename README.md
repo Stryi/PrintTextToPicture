@@ -5,13 +5,13 @@ wann und wo das Bild aufgenommen wurde, dann ist diese Software
 genau das Richtige für dich.
 
 Bild 1: Elektronischer Bilderrahmen
-![](\Screenshots\Bilderrahmen.jpg)
+![](Screenshots/Bilderrahmen.jpg)
 
 Bild 2: Text im Bilderrahmen
-![](\Screenshots\TextImBilderrahmen.jpg)
+![](Screenshots/TextImBilderrahmen.jpg)
 
 Bild 3: Softwareoberfläche
-![](\Screenshots\Hauptmaske.png)
+![](Screenshots/Hauptmaske.png)
 
 ## Funktionsweise:
 
