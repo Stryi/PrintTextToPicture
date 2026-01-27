@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PrintTextToPicture.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SourceDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%USERPROFILE%\Pictures\Bilder_fuer_den_Bilderrahmen</Value>
+    </Setting>
+    <Setting Name="ProcessDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">E:\</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

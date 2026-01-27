@@ -1,4 +1,5 @@
 ﻿using PrintTextToPicture;
+using PrintTextToPicture.Source;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,8 +16,10 @@ using Tools;
 
 internal class Program : ExecuteWorkerBase
 {
-    internal string PictureRootPath;
-    internal bool   ProcessSubFolder;
+    public static string SourceImageDirectory { get; set; }
+    public static string DestinationImageDirectory { get; set; }
+
+    public static bool Abort { get; set; }
 
     [STAThread]
     static void Main()
@@ -26,30 +29,47 @@ internal class Program : ExecuteWorkerBase
         var mainForm = new MainForm();
         Application.Run(mainForm);
 
-        //// Test auf einer einzigen JPG Datei.
+        //var program = new Program();
+        //var parameter = new ExecutionParameter();
+        //parameter.Compress = true;
+        //parameter.maxWidth  = 1920;
+        //parameter.maxHeight = 1080;
+        //parameter.AddText = true;
+        //parameter.SourceImageDirectory      = @"C:\Users\StryiC\Pictures\Bilderrahmen\Bilderrahmen 2022";
+        //parameter.DestinationImageDirectory = @"C:\Users\StryiC\Pictures\Bilderrahmen\Bilderrahmen 2022 FullHD";
+
+        //program.Execute(parameter);
+
+        // --------------------------------------------------------------------------------
+        // Test auf einer einzigen JPG Datei.
+        // --------------------------------------------------------------------------------
+
         //var sourcePath      = @"C:\Users\StryiC\Pictures\Bilderrahmen\Original.jpg";
         //var destinationPath = @"C:\Users\StryiC\Pictures\Bilderrahmen\Convert.jpg";
 
-        //File.Copy(sourcePath, destinationPath, true);
-
-        ////AddTextToImage(destinationPath, "Das ist ein Test.");
-
-        //ReducePictureSize (destinationPath, 1920, 1080);
-        //PrintTextToPicture(destinationPath, "Das ist ein Test.");
-
+        //var pictureMaker = new PictureMaker();
+        //pictureMaker.addText = true;
+        //pictureMaker.resizeToFit = true;
+        //pictureMaker.overrideDestination = true;
+        //pictureMaker.MakePicture(sourcePath, destinationPath, "Das ist ein Täscht.");
     }
 
 
-    public override bool Execute(string command)
+    public override bool Execute()
     {
-        var sourceDirList = Directory.GetDirectories(this.PictureRootPath);
+        var sourceDirList = Directory.GetDirectories(Program.SourceImageDirectory);
 
         this.count = 0;
-        this.maxCount = this.GetPictureCount(this.PictureRootPath);
+        this.maxCount = this.GetPictureCount(Program.SourceImageDirectory);
 
         foreach (var sourceDir in sourceDirList)
         {
-            this.ProcessFolder(sourceDir, command);
+            this.ProcessFolder(sourceDir);
+
+            if (Program.Abort)
+            {
+                break;
+            }
         }
 
         return true;
@@ -71,14 +91,22 @@ internal class Program : ExecuteWorkerBase
         return count;
     }
 
-    internal void ProcessFolder(string sourceDir, string command)
+    internal void ProcessFolder(string sourceDir)
     {
-        string pictureText = sourceDir.Replace(this.PictureRootPath, string.Empty);
-        pictureText = pictureText.Trim('\\');
+        var folderName = sourceDir.Replace(Program.SourceImageDirectory, string.Empty);
+        folderName = folderName.Trim('\\');
+
+        var destinationFolderName = Path.Combine(Program.DestinationImageDirectory, folderName);
+        if (!Directory.Exists(destinationFolderName))
+        {
+            Directory.CreateDirectory(destinationFolderName);
+        }
 
         var sourceFileList = new List<string>(Directory.GetFiles(sourceDir, "*.jpg"));
 
         int fileCount = 0;
+
+        string pictureText = folderName.Trim('\\');
 
         foreach (var sourcePicturePath in sourceFileList)
         {
@@ -87,36 +115,29 @@ internal class Program : ExecuteWorkerBase
 
             string fileName = Path.GetFileName(sourcePicturePath);
 
+            var destinationPicturePath = Path.Combine(Program.DestinationImageDirectory, destinationFolderName, fileName);
+
             this.ReportProgress(string.Format("{0}\\{1} ({2})", pictureText , fileName, fileCountText));
 
-            //Thread.Sleep(100);  
-            
             this.count++;
 
-            var pictureExists = File.Exists(sourcePicturePath);
+            PictureMaker.MakePicture(
+                sourcePicturePath,
+                destinationPicturePath,
+                pictureText);
 
-            if (command == "MAKE")
+            if (Program.Abort)
             {
-                PrintTextToPicture(sourcePicturePath, pictureText);
+                return;
             }
-
-            if (command == "COMPRESS")
-            {
-                // Full HD
-                ReducePictureSize(sourcePicturePath, 1920, 1080);
-            }
-
         }
 
-        if (this.ProcessSubFolder)
-        {
-            var subfolderList = Directory.GetDirectories(sourceDir);
+        var subfolderList = Directory.GetDirectories(sourceDir);
 
-            foreach (var subfolder in subfolderList )
-            {
+        foreach (var subfolder in subfolderList )
+        {
             
-                this.ProcessFolder(subfolder, command);
-            }
+            this.ProcessFolder(subfolder);
         }
     }
 
@@ -201,62 +222,7 @@ internal class Program : ExecuteWorkerBase
         }
     }
 
-    internal static void AddTextToImage(string picturePath, string pictureText)
-    {
-        Bitmap imageNew;
-
-        using (var fs = new FileStream(picturePath, FileMode.Open, FileAccess.Read))
-        using (var originalImage = Image.FromStream(fs))
-        using (var image = new Bitmap(originalImage))
-        using (var graphics = Graphics.FromImage(image))
-        {
-            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-
-            using (Font font = new Font("Consolas", 20, FontStyle.Regular))
-            {
-                float margin = 10f;
-
-                SizeF textSize = graphics.MeasureString(pictureText, font);
-                float x = margin;
-                float y = image.Height - textSize.Height - margin;
-
-                // Schatten
-                graphics.DrawString(pictureText, font, Brushes.Black, x + 1, y + 1);
-                graphics.DrawString(pictureText, font, Brushes.Black, x - 1, y - 1);
-
-                // Text
-                graphics.DrawString(pictureText, font, Brushes.White, x, y);
-            }
-
-            imageNew = image.Clone() as Bitmap;
-
-            foreach (var prop in originalImage.PropertyItems)
-            {
-                bool setProp = false;
-                if (prop.Id == 0x9003) setProp = true; // DateTimeOriginal
-                if (prop.Id == 0x010F) setProp = true; // Make
-                if (prop.Id == 0x0110) setProp = true; // Model
-                if (prop.Id == 0x829D) setProp = true; // FNumber
-                if (prop.Id == 0x829A) setProp = true; // ExposureTime
-                if (prop.Id == 0x8827) setProp = true; // ISOSpeedRatings
-                if (prop.Id == 0x920A) setProp = true; // FocalLength
-                if (prop.Id == 0x9209) setProp = true; // Flash
-                if (prop.Id == 0x9207) setProp = true; // MeteringMode
-                if (prop.Id == 0xA405) setProp = true; // FocalLengthIn35mmFilm
-                if (prop.Id == 0x0112) setProp = true; // Orientation
-
-                if (!setProp) continue;
-
-                imageNew.SetPropertyItem(prop);
-            }
-        }
-
-
-        imageNew.Save(picturePath, ImageFormat.Jpeg);
-    }
-
-    internal static void ReducePictureSize(string image, int maxWidth, int maxHeight)
+    internal static void ReducePictureSize(string picturePath, int maxWidth, int maxHeight)
     {
         bool resize = false;
         int newWidth;
@@ -264,78 +230,62 @@ internal class Program : ExecuteWorkerBase
         Bitmap originalImage;
         PixelFormat pixelFormat;
 
-        try
+        originalImage = new Bitmap(picturePath);
+        newWidth    = originalImage.Width;
+        newHeight   = originalImage.Height;
+        pixelFormat = originalImage.PixelFormat;
+
+        if (originalImage.Width > maxWidth)
         {
-            originalImage = new Bitmap(image);
-            newWidth    = originalImage.Width;
-            newHeight   = originalImage.Height;
-            pixelFormat = originalImage.PixelFormat;
-
-            if (originalImage.Width > maxWidth)
-            {
-                newWidth = maxWidth;
-                newHeight = (int)((float)originalImage.Height * ((float)newWidth / (float)originalImage.Width));
-                resize = true;
-            }
-
-            if (originalImage.Height > maxHeight)
-            {
-                newHeight = maxHeight;
-                newWidth = (int)((float)originalImage.Width * ((float)newHeight / (float)originalImage.Height));
-
-                resize = true;
-            }
-
-            if (!resize)
-            {
-                originalImage.Dispose();
-                return;
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Fehler '{ex.Message}' beim Lesen des Bildes: {image}");
+            newWidth = maxWidth;
+            newHeight = (int)((float)originalImage.Height * ((float)newWidth / (float)originalImage.Width));
+            resize = true;
         }
 
-        try
+        if (originalImage.Height > maxHeight)
         {
-            using (Bitmap newImage = new Bitmap(newWidth, newHeight, pixelFormat))
-            {
-                using (Graphics g = Graphics.FromImage(newImage))
-                {
-                    g.DrawImage(originalImage, 0, 0, newWidth, newHeight);
+            newHeight = maxHeight;
+            newWidth = (int)((float)originalImage.Width * ((float)newHeight / (float)originalImage.Height));
 
-                    foreach(var prop in originalImage.PropertyItems)
-                    {
-                        bool setProp = false;
-                        if (prop.Id == 0x9003) setProp = true; // DateTimeOriginal
-                        if (prop.Id == 0x010F) setProp = true; // Make
-                        if (prop.Id == 0x0110) setProp = true; // Model
-                        if (prop.Id == 0x829D) setProp = true; // FNumber
-                        if (prop.Id == 0x829A) setProp = true; // ExposureTime
-                        if (prop.Id == 0x8827) setProp = true; // ISOSpeedRatings
-                        if (prop.Id == 0x920A) setProp = true; // FocalLength
-                        if (prop.Id == 0x9209) setProp = true; // Flash
-                        if (prop.Id == 0x9207) setProp = true; // MeteringMode
-                        if (prop.Id == 0xA405) setProp = true; // FocalLengthIn35mmFilm
-                        if (prop.Id == 0x0112) setProp = true; // Orientation
-
-                        if (!setProp) continue;
-
-                        newImage.SetPropertyItem(prop);
-                    }
-
-                    originalImage.Dispose();
-
-                    newImage.Save(image, ImageFormat.Jpeg);
-                }
-            }
+            resize = true;
         }
-        catch (Exception ex)
+
+        if (!resize)
         {
             originalImage.Dispose();
-            Trace.WriteLine($"Fehler '{ex.Message}' beim Speichern des Bildes: {image}");
-            //throw new Exception($"Fehler '{ex.Message}' beim Speichern des Bildes: {image}");
+            return;
+        }
+
+        using (Bitmap newImage = new Bitmap(newWidth, newHeight, pixelFormat))
+        {
+            using (Graphics g = Graphics.FromImage(newImage))
+            {
+                g.DrawImage(originalImage, 0, 0, newWidth, newHeight);
+
+                foreach(var prop in originalImage.PropertyItems)
+                {
+                    bool setProp = false;
+                    if (prop.Id == 0x9003) setProp = true; // DateTimeOriginal
+                    if (prop.Id == 0x010F) setProp = true; // Make
+                    if (prop.Id == 0x0110) setProp = true; // Model
+                    if (prop.Id == 0x829D) setProp = true; // FNumber
+                    if (prop.Id == 0x829A) setProp = true; // ExposureTime
+                    if (prop.Id == 0x8827) setProp = true; // ISOSpeedRatings
+                    if (prop.Id == 0x920A) setProp = true; // FocalLength
+                    if (prop.Id == 0x9209) setProp = true; // Flash
+                    if (prop.Id == 0x9207) setProp = true; // MeteringMode
+                    if (prop.Id == 0xA405) setProp = true; // FocalLengthIn35mmFilm
+                    if (prop.Id == 0x0112) setProp = true; // Orientation
+
+                    if (!setProp) continue;
+
+                    newImage.SetPropertyItem(prop);
+                }
+
+                originalImage.Dispose();
+
+                newImage.Save(picturePath, ImageFormat.Jpeg);
+            }
         }
     }
 }

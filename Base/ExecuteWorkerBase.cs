@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PrintTextToPicture.Source;
+using System;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
@@ -31,7 +32,7 @@ namespace Tools
             this.ReportProgress(error);
         }
 
-        public virtual bool Execute(string command)
+        public virtual bool Execute()
         {
             return true;
         }
