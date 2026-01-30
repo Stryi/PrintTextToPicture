@@ -24,6 +24,10 @@ namespace PrintTextToPicture.Source
         {
             base.OnLoad(e);
 
+            this.labelQuelleUndZiel.Text = 
+                $"Quelle : {Program.SourceImageDirectory}" + Environment.NewLine +
+                $"Ziel   : {Program.DestinationImageDirectory}";
+            this.labelGlobalProgressCount.ResetText();
             this.labelProgress.ResetText();
             this.backgroundWorker.RunWorkerAsync();
         }
@@ -40,7 +44,14 @@ namespace PrintTextToPicture.Source
         {
             if (e.UserState is ProgressInformation)
             {
-                this.labelProgress.Text = ((ProgressInformation)e.UserState).Message;
+                var progressInfo = (ProgressInformation)e.UserState;
+
+                var numerText = String.Format("{0:N0}", progressInfo.Current);
+                numerText += " von ";
+                numerText += String.Format("{0:N0}", progressInfo.Max);
+
+                this.labelProgress.Text = progressInfo.Message;
+                this.labelGlobalProgressCount.Text = numerText;
             }
             this.progressBar.Value = e.ProgressPercentage;
         }
@@ -66,8 +77,10 @@ namespace PrintTextToPicture.Source
                 completedMessage = ((ProgressInformation)e.Result).Message;
             }
 
-            MessageBox.Show(this, completedMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.progressBar.Value = 0;
+            this.labelGlobalProgressCount.ResetText();
+
+            MessageBox.Show(this, completedMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             this.Close();
         }

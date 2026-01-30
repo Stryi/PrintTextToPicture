@@ -29,16 +29,25 @@ internal class Program : ExecuteWorkerBase
         var mainForm = new MainForm();
         Application.Run(mainForm);
 
-        //var program = new Program();
-        //var parameter = new ExecutionParameter();
-        //parameter.Compress = true;
-        //parameter.maxWidth  = 1920;
-        //parameter.maxHeight = 1080;
-        //parameter.AddText = true;
-        //parameter.SourceImageDirectory      = @"C:\Users\StryiC\Pictures\Bilderrahmen\Bilderrahmen 2022";
-        //parameter.DestinationImageDirectory = @"C:\Users\StryiC\Pictures\Bilderrahmen\Bilderrahmen 2022 FullHD";
 
-        //program.Execute(parameter);
+        //PictureMaker.overrideDestination = true;
+        //PictureMaker.addText = true;
+        //PictureMaker.resizeToFit = true;
+        //PictureMaker.maxWidth  = 1920;
+        //PictureMaker.maxHeight = 1080;
+        //Program.SourceImageDirectory      = @"C:\Users\StryiC\Pictures\Bilderrahmen\Bilderrahmen 2022\2022.05.21 Südtirol\";
+        //Program.DestinationImageDirectory = @"C:\Users\StryiC\Pictures\Bilderrahmen\Bilderrahmen 2022 FullHD\2022.05.21 Südtirol\";
+
+        //// Startzeitpunkt merken
+        //var startTime = DateTime.Now;
+
+        //var program = new Program();
+        //program.Execute();
+
+        //// Dauer ausgeben
+        //var endTime = DateTime.Now;
+        //var duration = endTime - startTime;
+        //Console.WriteLine("Dauer: " + duration.ToString());
 
         // --------------------------------------------------------------------------------
         // Test auf einer einzigen JPG Datei.
@@ -57,20 +66,10 @@ internal class Program : ExecuteWorkerBase
 
     public override bool Execute()
     {
-        var sourceDirList = Directory.GetDirectories(Program.SourceImageDirectory);
-
         this.count = 0;
         this.maxCount = this.GetPictureCount(Program.SourceImageDirectory);
 
-        foreach (var sourceDir in sourceDirList)
-        {
-            this.ProcessFolder(sourceDir);
-
-            if (Program.Abort)
-            {
-                break;
-            }
-        }
+        this.ProcessFolder(Program.SourceImageDirectory);
 
         return true;
     }
@@ -106,18 +105,21 @@ internal class Program : ExecuteWorkerBase
 
         int fileCount = 0;
 
-        string pictureText = folderName.Trim('\\');
+        folderName = folderName.Trim('\\');
 
         foreach (var sourcePicturePath in sourceFileList)
         {
             fileCount++;
             var fileCountText = string.Format("{0} von {1}", fileCount, sourceFileList.Count);
+            var pictureText = folderName;
 
             string fileName = Path.GetFileName(sourcePicturePath);
 
             var destinationPicturePath = Path.Combine(Program.DestinationImageDirectory, destinationFolderName, fileName);
+            if (string.IsNullOrEmpty(pictureText))
+                pictureText = fileName;
 
-            this.ReportProgress(string.Format("{0}\\{1} ({2})", pictureText , fileName, fileCountText));
+            this.ReportProgress(string.Format("{0}\\ - Bild {1}", folderName, fileCountText));
 
             this.count++;
 
@@ -138,6 +140,11 @@ internal class Program : ExecuteWorkerBase
         {
             
             this.ProcessFolder(subfolder);
+
+            if (Program.Abort)
+            {
+                return;
+            }
         }
     }
 

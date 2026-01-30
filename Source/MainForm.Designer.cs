@@ -53,7 +53,7 @@
             this.textBoxDestinationDir.Location = new System.Drawing.Point(33, 121);
             this.textBoxDestinationDir.Name = "textBoxDestinationDir";
             this.textBoxDestinationDir.Size = new System.Drawing.Size(771, 26);
-            this.textBoxDestinationDir.TabIndex = 1;
+            this.textBoxDestinationDir.TabIndex = 5;
             // 
             // buttonSelectDestinationDir
             // 
@@ -62,7 +62,7 @@
             this.buttonSelectDestinationDir.Location = new System.Drawing.Point(825, 121);
             this.buttonSelectDestinationDir.Name = "buttonSelectDestinationDir";
             this.buttonSelectDestinationDir.Size = new System.Drawing.Size(43, 32);
-            this.buttonSelectDestinationDir.TabIndex = 2;
+            this.buttonSelectDestinationDir.TabIndex = 6;
             this.buttonSelectDestinationDir.Text = "...";
             this.buttonSelectDestinationDir.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.buttonSelectDestinationDir.UseVisualStyleBackColor = true;
@@ -76,7 +76,7 @@
             this.labelDescription.Location = new System.Drawing.Point(29, 90);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(775, 23);
-            this.labelDescription.TabIndex = 0;
+            this.labelDescription.TabIndex = 4;
             this.labelDescription.Text = "Ziel-Verzeichnis, wo die Bildern komprimiert und beschriftet kopiert werden solle" +
     "n:";
             // 
@@ -113,7 +113,7 @@
             this.checkBoxCompress.Location = new System.Drawing.Point(33, 206);
             this.checkBoxCompress.Name = "checkBoxCompress";
             this.checkBoxCompress.Size = new System.Drawing.Size(186, 24);
-            this.checkBoxCompress.TabIndex = 10;
+            this.checkBoxCompress.TabIndex = 8;
             this.checkBoxCompress.Text = "Bilder komprimieren";
             this.checkBoxCompress.UseVisualStyleBackColor = true;
             // 
@@ -126,7 +126,7 @@
             this.checkBoxAddText.Location = new System.Drawing.Point(467, 206);
             this.checkBoxAddText.Name = "checkBoxAddText";
             this.checkBoxAddText.Size = new System.Drawing.Size(156, 24);
-            this.checkBoxAddText.TabIndex = 11;
+            this.checkBoxAddText.TabIndex = 9;
             this.checkBoxAddText.Text = "Text hinzufügen";
             this.checkBoxAddText.UseVisualStyleBackColor = true;
             // 
@@ -137,7 +137,7 @@
             this.buttonStart.Location = new System.Drawing.Point(889, 23);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(122, 41);
-            this.buttonStart.TabIndex = 12;
+            this.buttonStart.TabIndex = 0;
             this.buttonStart.Text = "Starten";
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
@@ -150,7 +150,7 @@
             this.label1.Location = new System.Drawing.Point(29, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(775, 23);
-            this.label1.TabIndex = 14;
+            this.label1.TabIndex = 1;
             this.label1.Text = "Quell-Verzeichnis mit den ORIGINAL Bildern:";
             // 
             // buttonSelectSourceDir
@@ -160,7 +160,7 @@
             this.buttonSelectSourceDir.Location = new System.Drawing.Point(825, 35);
             this.buttonSelectSourceDir.Name = "buttonSelectSourceDir";
             this.buttonSelectSourceDir.Size = new System.Drawing.Size(43, 32);
-            this.buttonSelectSourceDir.TabIndex = 16;
+            this.buttonSelectSourceDir.TabIndex = 3;
             this.buttonSelectSourceDir.Text = "...";
             this.buttonSelectSourceDir.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.buttonSelectSourceDir.UseVisualStyleBackColor = true;
@@ -174,7 +174,7 @@
             this.textBoxSourceDir.Location = new System.Drawing.Point(33, 35);
             this.textBoxSourceDir.Name = "textBoxSourceDir";
             this.textBoxSourceDir.Size = new System.Drawing.Size(771, 26);
-            this.textBoxSourceDir.TabIndex = 15;
+            this.textBoxSourceDir.TabIndex = 2;
             // 
             // checkBoxOverrideDestination
             // 
@@ -185,7 +185,7 @@
             this.checkBoxOverrideDestination.Location = new System.Drawing.Point(33, 153);
             this.checkBoxOverrideDestination.Name = "checkBoxOverrideDestination";
             this.checkBoxOverrideDestination.Size = new System.Drawing.Size(319, 24);
-            this.checkBoxOverrideDestination.TabIndex = 17;
+            this.checkBoxOverrideDestination.TabIndex = 7;
             this.checkBoxOverrideDestination.Text = "Überschreibe Dateien im Ziel-Verzeichnis";
             this.checkBoxOverrideDestination.UseVisualStyleBackColor = true;
             // 

@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.LinkLabel;
+﻿using PrintTextToPicture.Properties;
+using System;
 
 namespace PrintTextToPicture
 {
@@ -15,21 +7,23 @@ namespace PrintTextToPicture
     {
         internal static string SourceDir;
         internal static string ProcessDir;
-
+        internal static bool   OverrideDestination;
 
         internal static void ReadConfig()
         {
-            Configuration.SourceDir        = Properties.Settings.Default.SourceDir;
-            Configuration.ProcessDir       = Properties.Settings.Default.ProcessDir;
+            Configuration.SourceDir           = Settings.Default.SourceDir;
+            Configuration.ProcessDir          = Settings.Default.ProcessDir;
+            Configuration.OverrideDestination = Settings.Default.OverrideDestination;    
 
             Configuration.SourceDir = Environment.ExpandEnvironmentVariables(Configuration.SourceDir);
         }
 
         internal static void SaveConfig()
         {
-            Properties.Settings.Default.SourceDir  = Configuration.SourceDir;
-            Properties.Settings.Default.ProcessDir = Configuration.ProcessDir;
-            Properties.Settings.Default.Save();
+            Settings.Default.SourceDir           = Configuration.SourceDir;
+            Settings.Default.ProcessDir          = Configuration.ProcessDir;
+            Settings.Default.OverrideDestination = Configuration.OverrideDestination;
+            Settings.Default.Save();
         }
     }
 }

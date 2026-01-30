@@ -46,5 +46,17 @@ namespace PrintTextToPicture.Properties {
                 this["ProcessDir"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool OverrideDestination {
+            get {
+                return ((bool)(this["OverrideDestination"]));
+            }
+            set {
+                this["OverrideDestination"] = value;
+            }
+        }
     }
 }

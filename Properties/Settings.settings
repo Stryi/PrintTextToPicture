@@ -8,5 +8,8 @@
     <Setting Name="ProcessDir" Type="System.String" Scope="User">
       <Value Profile="(Default)">E:\</Value>
     </Setting>
+    <Setting Name="OverrideDestination" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -21,6 +21,7 @@ namespace PrintTextToPicture
 
             this.textBoxSourceDir.Text      = Configuration.SourceDir;
             this.textBoxDestinationDir.Text = Configuration.ProcessDir;
+            this.checkBoxOverrideDestination.Checked = Configuration.OverrideDestination;
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -29,6 +30,7 @@ namespace PrintTextToPicture
             
             Configuration.SourceDir  = this.textBoxSourceDir.Text;
             Configuration.ProcessDir = this.textBoxDestinationDir.Text;
+            Configuration.OverrideDestination = this.checkBoxOverrideDestination.Checked;
 
             Configuration.SaveConfig();
         }

@@ -1,6 +1,7 @@
 ﻿using PrintTextToPicture.Source;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -51,7 +52,10 @@ namespace Tools
         protected void ReportProgress(string message)
         {
             if (this.BackgroundWorker == null)
+            {
+                Trace.TraceInformation(message);
                 return;
+            }
 
             int percent = (this.count * 100) / this.maxCount;
             var info = new ProgressInformation();

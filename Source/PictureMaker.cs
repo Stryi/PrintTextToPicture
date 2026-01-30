@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace PrintTextToPicture.Source
 {
-    internal class PictureMaker
+    internal static class PictureMaker
     {
         public static bool addText;
         public static bool resizeToFit;
@@ -24,6 +24,13 @@ namespace PrintTextToPicture.Source
                 }
             }
 
+            if ((!PictureMaker.resizeToFit) && (!PictureMaker.addText))
+            {
+                // Bild nur kopieren, keine Änderung
+                File.Copy(sourceImagePath, destinationImagePath, PictureMaker.overrideDestination);
+                return;
+            }
+
             Bitmap originalImage = new Bitmap(sourceImagePath);
             Bitmap finalImage = originalImage;
 
@@ -32,7 +39,7 @@ namespace PrintTextToPicture.Source
                 finalImage = PictureMaker.ReducePictureSize(originalImage, PictureMaker.maxWidth, PictureMaker.maxHeight);
             }
 
-            if (PictureMaker.addText)
+            if ((PictureMaker.addText) && !string.IsNullOrWhiteSpace(text))
             {
                 finalImage = PictureMaker.PrintTextToPicture(finalImage, text);
             }
