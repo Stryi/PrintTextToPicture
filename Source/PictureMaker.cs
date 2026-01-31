@@ -44,7 +44,19 @@ namespace PrintTextToPicture.Source
                 finalImage = PictureMaker.PrintTextToPicture(finalImage, text);
             }
 
-            finalImage.Save(destinationImagePath, ImageFormat.Jpeg);
+            var jpegEncoder = GetJpegEncoder();
+
+            var encoderParams = new EncoderParameters(1);
+            encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 75L);
+
+
+            finalImage.Save(destinationImagePath, jpegEncoder, encoderParams);
+        }
+
+        private static ImageCodecInfo GetJpegEncoder()
+        {
+            return ImageCodecInfo.GetImageEncoders()
+                .First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
         }
 
         internal static Bitmap ReducePictureSize(Bitmap originalImage, int maxWidth, int maxHeight)
@@ -78,7 +90,7 @@ namespace PrintTextToPicture.Source
 
             using (Graphics g = Graphics.FromImage(newImage))
             {
-                g.DrawImage(originalImage, 1, 0, newWidth, newHeight);
+                g.DrawImage(originalImage, 0, 0, newWidth, newHeight);
 
                 foreach (var prop in originalImage.PropertyItems)
                 {
