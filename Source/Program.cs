@@ -24,8 +24,6 @@ internal class Program : ExecuteWorkerBase
     [STAThread]
     static void Main()
     {
-        Configuration.ReadConfig();
-
         var mainForm = new MainForm();
         Application.Run(mainForm);
 

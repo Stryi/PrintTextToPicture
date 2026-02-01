@@ -63,9 +63,9 @@ namespace PrintTextToPicture.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap compress {
+        internal static System.Drawing.Bitmap addText {
             get {
-                object obj = ResourceManager.GetObject("compress", resourceCulture);
+                object obj = ResourceManager.GetObject("addText", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace PrintTextToPicture.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap text {
+        internal static System.Drawing.Bitmap compress {
             get {
-                object obj = ResourceManager.GetObject("text", resourceCulture);
+                object obj = ResourceManager.GetObject("compress", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

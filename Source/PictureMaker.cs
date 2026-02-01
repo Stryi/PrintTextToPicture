@@ -13,6 +13,7 @@ namespace PrintTextToPicture.Source
         public static int  maxWidth  = 1920;
         public static int  maxHeight = 1080;
         public static bool overrideDestination = true;
+        public static int  pictureQuality = 75;
 
         internal static void MakePicture(string sourceImagePath, string destinationImagePath, string text)
         {
@@ -47,7 +48,7 @@ namespace PrintTextToPicture.Source
             var jpegEncoder = GetJpegEncoder();
 
             var encoderParams = new EncoderParameters(1);
-            encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 75L);
+            encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, PictureMaker.pictureQuality);
 
 
             finalImage.Save(destinationImagePath, jpegEncoder, encoderParams);

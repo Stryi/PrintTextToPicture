@@ -58,5 +58,65 @@ namespace PrintTextToPicture.Properties {
                 this["OverrideDestination"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Compress {
+            get {
+                return ((bool)(this["Compress"]));
+            }
+            set {
+                this["Compress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1080")]
+        public int MaxPictureHeight {
+            get {
+                return ((int)(this["MaxPictureHeight"]));
+            }
+            set {
+                this["MaxPictureHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1920")]
+        public int MaxPictureWidth {
+            get {
+                return ((int)(this["MaxPictureWidth"]));
+            }
+            set {
+                this["MaxPictureWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AddText {
+            get {
+                return ((bool)(this["AddText"]));
+            }
+            set {
+                this["AddText"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("75")]
+        public int PictureQuality {
+            get {
+                return ((int)(this["PictureQuality"]));
+            }
+            set {
+                this["PictureQuality"] = value;
+            }
+        }
     }
 }
