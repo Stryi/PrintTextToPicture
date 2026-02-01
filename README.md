@@ -11,7 +11,7 @@ Bild 2: Text im Bilderrahmen
 ![](Screenshots/TextImBilderrahmen.jpg)
 
 Bild 3: Softwareoberfläche
-![](Screenshots/Hauptmaske.jpg)
+![](Screenshots/Hauptmaske.png)
 
 ## Funktionsweise:
 
