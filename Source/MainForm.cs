@@ -22,18 +22,29 @@ namespace PrintTextToPicture
         {
             base.OnLoad(e);
 
-            this.textBoxSourceDir.Text      = Environment.ExpandEnvironmentVariables(Settings.Default.SourceDir);
-            this.textBoxDestinationDir.Text = Environment.ExpandEnvironmentVariables(Settings.Default.ProcessDir);
-            this.checkBoxOverrideDestination.Checked = Settings.Default.OverrideDestination;
-            this.checkBoxCompress.Checked  = Settings.Default.Compress;
-            this.numericUpDownWidth.Value  = Settings.Default.MaxPictureHeight;
-            this.numericUpDownHieght.Value = Settings.Default.MaxPictureHeight;
-            this.checkBoxAddText.Checked   = Settings.Default.AddText;
+            this.LoadSettings();
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
+
+            this.SaveSettings();
+        }
+
+        private void LoadSettings()
+        {
+            this.textBoxSourceDir.Text = Environment.ExpandEnvironmentVariables(Settings.Default.SourceDir);
+            this.textBoxDestinationDir.Text = Environment.ExpandEnvironmentVariables(Settings.Default.ProcessDir);
+            this.checkBoxOverrideDestination.Checked = Settings.Default.OverrideDestination;
+            this.checkBoxCompress.Checked = Settings.Default.Compress;
+            this.numericUpDownWidth.Value = Settings.Default.MaxPictureHeight;
+            this.numericUpDownHieght.Value = Settings.Default.MaxPictureHeight;
+            this.checkBoxAddText.Checked = Settings.Default.AddText;
+        }
+
+        private void SaveSettings()
+        { 
             
             Settings.Default.SourceDir = this.textBoxSourceDir.Text;
             Settings.Default.ProcessDir = this.textBoxDestinationDir.Text;
@@ -78,6 +89,8 @@ namespace PrintTextToPicture
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
+            this.SaveSettings();
+
             this.textBoxSourceDir.Enabled = false;
             this.textBoxDestinationDir.Enabled = false;
             this.buttonSelectSourceDir.Enabled = false;
@@ -116,24 +129,6 @@ namespace PrintTextToPicture
             this.checkBoxCompress.Enabled = true;
             this.checkBoxAddText.Enabled = true;
             this.buttonStart.Enabled = true;
-
-            /*
-            var executeParameter = new ExecutionParameter();
-
-            executeParameter.SourceImageDirectory      = this.textBoxSourceDir.Text;
-            executeParameter.DestinationImageDirectory = this.textBoxDestinationDir.Text;
-
-            PictureMaker.overrideDestination = this.checkBoxOverrideDestination.Checked;
-            PictureMaker.addText     = this.checkBoxAddText.Checked;
-            PictureMaker.resizeToFit = this.checkBoxCompress.Checked;
-            PictureMaker.maxHeight   = 1080;
-            PictureMaker.maxWidth    = 1920;
-
-            this.labelProgress.ResetText();
-            this.labelProgress.ForeColor = SystemColors.WindowText;
-
-            this.backgroundWorker.RunWorkerAsync(executeParameter);
-            */
         }
 
         private void checkBoxCompress_CheckedChanged(object sender, EventArgs e)
